@@ -1,7 +1,19 @@
 <template>
   <div>
+    <div style="padding: 12px; border: 1px solid grey;">
+      <span>Filtey BY:</span> <br>
+      <input v-model="heightBy" type="number"> : Height _eq atau sama dengan <br>
+      <input v-model="limit" type="number"> : Limit data yang ditampilkan <br>
+      <button @click="submit()">
+        Submit
+      </button>
+      <button v-if="fetchSubmit" @click="clear()">
+        Clear
+      </button>
+    </div>
+
     <PokemonTable 
-      :url="url" 
+      v-if="fetchSubmit"
       :query="query" 
       :variable="variable"/>
   </div>
@@ -17,13 +29,18 @@ import gql from 'graphql-tag'
   }
 })
 export default class Home extends Vue {
-  url = "https://bahardev.my.id"
   query = ""
   variable = {}
-  created() {
+  limit = 0
+  heightBy = 0
+  fetchSubmit = false
+
+  submit() {
+
+    // query data
     this.query = gql`
-      query Pokemon_v2_ability_aggregate {
-        pokemon_v2_pokemon {
+      query Pokemon_v2_pokemon($where: pokemon_v2_pokemon_bool_exp, $limit: Int) {
+        pokemon_v2_pokemon(where: $where, limit: $limit) {
           height
           id
           name
@@ -31,13 +48,22 @@ export default class Home extends Vue {
         }
       }
     `
+
+    // filter data
     this.variable = {
       "where": {
         "height": {
-          "_neq": 5
-        }
-      }
+          "_eq": parseInt(this.heightBy) 
+        },
+      },
+      "limit": parseInt(this.limit)
     }
+    
+    this.fetchSubmit = true
+  }
+
+  clear() {
+    this.fetchSubmit = false
   }
 }
 </script>

@@ -50,8 +50,7 @@ export default {
     // Sets up the apollo client endpoints
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://beta.pokeapi.co',
-        browserHttpEndpoint: '/graphql/v1beta',
+        httpEndpoint: 'https://beta.pokeapi.co/graphql/v1beta',
         httpLinkOptions: {
           credentials: 'same-origin'
         },
@@ -69,13 +68,7 @@ export default {
     },
     authenticationType: 'Bearer', 
     tokenName: 'apollo-token',
-    includeNodeModules: true,
-    // cookieAttributes: {
-    //   expires: 7,
-    //   path: '/',
-    //   domain: 'example.com',
-    //   secure: false,
-    // },
+    includeNodeModules: true
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

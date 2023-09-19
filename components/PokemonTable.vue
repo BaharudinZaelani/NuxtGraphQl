@@ -1,17 +1,24 @@
 <template>
     <div class="card">
-        <div class="card-body">
+        <div v-if="!fetched">Harap tunggu ...</div>
+        <div v-if="fetched" class="card-body">
             <h1>Table Pokemon</h1>
+            <span>Endpoint : https://beta.pokeapi.co/graphql/v1beta</span>
             <table cellpadding="10" cellspacing="0">
                 <tr>
-                    <th v-for="(header, index) in data.headers" :key="index">{{ header.label }}</th>
+                    <th>NO</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Height</th>
+                    <th>Order</th>
                 </tr>
-                <!-- <tr>
-                    <td>xx</td>
-                    <td>xx</td>
-                    <td>xx</td>
-                    <td>xx</td>
-                </tr> -->
+                <tr v-for="(item, index) in data" :key="index">
+                    <td>{{ index+1 }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.height }}</td>
+                    <td>{{ item.order }}</td>
+                </tr>
             </table>
         </div>
     </div>
@@ -46,23 +53,13 @@
 import { Component, Prop, Vue } from "nuxt-property-decorator"
 @Component
 export default class PokemonTable extends Vue {
-    @Prop({required: true}) url
     @Prop({required: true}) query
     @Prop({default: ""}) variable
     data = {}
+    fetched = false
 
     created() {
-        this.data = {
-            headers: [
-                {label: "ID"},
-                {label: "Name"},
-                {label: "Height"},
-                {label: "Order"}
-            ],
-            data: [
-
-            ]
-        }
+        this.data = {}
         this.ftechData()
     }
 
@@ -71,9 +68,10 @@ export default class PokemonTable extends Vue {
             query: this.query, 
             variables: this.variable
         }).then((data) => {
-            console.log(data)
+            this.data = data.data.pokemon_v2_pokemon
+            this.fetched = true
         }).catch(err => {
-            alert("Error Fetched..! see console")
+            alert("Error Fetching")
             console.log(err)
         })
     }
