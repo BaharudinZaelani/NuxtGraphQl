@@ -4,7 +4,7 @@
 
 ```bash
 # awal setup
-$ yarn add yarn add @nuxtjs/apollo graphql-tag apollo-cache-inmemory
+$ yarn add @nuxtjs/apollo graphql-tag apollo-cache-inmemory
 
 # install dependencies
 $ yarn install
